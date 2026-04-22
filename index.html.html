@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Webliko · Central Project Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f7fafc;
+      font-family: 'Inter', sans-serif;
+      color: #1a2c3e;
+      padding: 2rem 1.5rem;
+    }
+    .container { max-width: 1400px; margin: 0 auto; }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+      gap: 1rem;
+    }
+    .logo-area { display: flex; align-items: center; gap: 12px; }
+    .logo-icon {
+      background: #0f7b6e;
+      width: 44px; height: 44px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      box-shadow: 0 10px 15px -6px rgba(15, 123, 110, 0.2);
+    }
+    .logo-text h1 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #1c453e, #0f7b6e);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .logo-text p { font-size: 0.8rem; color: #5b7a8c; font-weight: 500; }
+    .admin-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: white;
+      padding: 0.4rem 1rem 0.4rem 1.2rem;
+      border-radius: 60px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      border: 1px solid #e0edf2;
+    }
+    .admin-badge { font-size: 0.8rem; font-weight: 600; background: #eef6f3; padding: 0.2rem 0.8rem; border-radius: 30px; color: #0f7b6e; }
+    .btn-outline-admin { background: transparent; border: none; font-weight: 500; font-size: 0.8rem; cursor: pointer; padding: 0.4rem 0.9rem; border-radius: 40px; transition: 0.2s; color: #2c5f7a; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-outline-admin:hover { background: #eef2f7; }
+    .btn-login { background: #0f7b6e; color: white; border: none; }
+    .stats-badge { background: white; padding: 0.3rem 1.2rem; border-radius: 60px; font-size: 0.8rem; font-weight: 500; color: #1f5e6e; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+    .toolbar {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;
+      margin-bottom: 2.2rem; background: white; padding: 0.6rem 1.2rem; border-radius: 70px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #e2edf2;
+    }
+    .search-wrap {
+      display: flex; align-items: center; background: #f9fefc; border-radius: 48px;
+      padding: 0.2rem 0.2rem 0.2rem 1rem; border: 1px solid #dee9ef; flex: 1; max-width: 340px;
+    }
+    .search-wrap input { border: none; padding: 0.65rem 0.8rem; font-size: 0.9rem; width: 100%; background: transparent; outline: none; }
+    .clear-search { background: none; border: none; padding: 0 12px; cursor: pointer; color: #8ba5bc; }
+    .admin-only-card {
+      background: white; border-radius: 32px; padding: 1.5rem 1.8rem; margin-bottom: 2.5rem;
+      box-shadow: 0 12px 28px -10px rgba(0,0,0,0.06); border: 1px solid #e5f0f5;
+      transition: all 0.2s;
+    }
+    .form-title { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 1.2rem; margin-bottom: 1.2rem; color: #1b4d5e; }
+    .form-grid { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.2rem; }
+    .input-group { flex: 1; min-width: 170px; }
+    .input-group label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #5f7f9e; margin-bottom: 5px; display: block; }
+    .input-group input, .input-group textarea { width: 100%; padding: 0.7rem 1rem; border-radius: 20px; border: 1.5px solid #e2edf2; font-family: 'Inter', sans-serif; font-size: 0.85rem; transition: 0.2s; }
+    .input-group input:focus, .input-group textarea:focus { border-color: #0f7b6e; outline: none; box-shadow: 0 0 0 3px rgba(15,123,110,0.1); }
+    .btn-primary { background: #0f7b6e; border: none; padding: 0.6rem 1.6rem; border-radius: 40px; font-weight: 600; color: white; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
+    .btn-primary:hover { background: #0b6358; transform: scale(0.97); }
+    .btn-secondary { background: #f0f4f9; border: 1px solid #cde0e8; padding: 0.6rem 1.3rem; border-radius: 40px; font-weight: 500; cursor: pointer; }
+    .websites-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 1.8rem; margin-top: 1rem; }
+    .card { background: white; border-radius: 28px; padding: 1.4rem; transition: 0.25s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #eaf3f0; }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 24px 32px -16px rgba(0,0,0,0.08); border-color: #cbe3db; }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .card-title { font-weight: 700; font-size: 1.25rem; color: #1c4e4a; display: flex; gap: 8px; align-items: center; }
+    .card-title i { color: #0f7b6e; font-size: 1.2rem; }
+    .card-actions { display: flex; gap: 12px; }
+    .card-actions button { background: transparent; border: none; font-size: 1rem; cursor: pointer; color: #99b8ca; transition: 0.2s; }
+    .card-actions button.edit-card:hover { color: #0f7b6e; }
+    .card-actions button.delete-card:hover { color: #e27c5c; }
+    .card-description { margin: 1rem 0 1.2rem; color: #2f5e6e; line-height: 1.45; font-size: 0.85rem; }
+    .card-link { display: inline-flex; align-items: center; gap: 8px; background: #f3faf7; padding: 0.5rem 1rem; border-radius: 34px; font-size: 0.8rem; font-weight: 500; text-decoration: none; color: #16685c; transition: 0.2s; }
+    .card-link:hover { background: #e5f2ed; color: #0c4e44; }
+    .empty-state { text-align: center; grid-column: 1 / -1; padding: 3rem; background: #fefef7; border-radius: 48px; color: #7399ae; }
+    footer { margin-top: 3rem; text-align: center; font-size: 0.75rem; color: #98b1c2; border-top: 1px solid #e4eff5; padding-top: 1.8rem; }
+    .creator-credit { margin-top: 0.5rem; font-size: 0.7rem; color: #8ba5bc; letter-spacing: 0.3px; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); backdrop-filter: blur(6px); align-items: center; justify-content: center; z-index: 1000; }
+    .modal-card { background: white; max-width: 400px; width: 90%; border-radius: 36px; padding: 2rem 1.8rem; text-align: center; box-shadow: 0 30px 40px -20px rgba(0,0,0,0.2); }
+    .modal-card input { width: 100%; padding: 0.9rem; margin: 1rem 0; border-radius: 60px; border: 1px solid #cde0e8; font-family: inherit; }
+    .btn-modal { background: #0f7b6e; color: white; border: none; padding: 0.7rem; width: 100%; border-radius: 60px; font-weight: 600; cursor: pointer; }
+    .error-msg { color: #e27c5c; font-size: 0.75rem; margin-top: 8px; }
+    .hidden-admin { display: none; }
+    @media (max-width: 680px) { body { padding: 1rem; } .toolbar { flex-direction: column; align-items: stretch; border-radius: 28px; } .admin-controls { width: 100%; justify-content: space-between; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo-area">
+      <div class="logo-icon"><i class="fas fa-globe"></i></div>
+      <div class="logo-text">
+        <h1>Webliko</h1>
+        <p>central archive · all your creations</p>
+      </div>
+    </div>
+    <div class="admin-controls" id="adminControls">
+      <span id="adminStatusBadge" class="admin-badge"><i class="fas fa-eye"></i> Viewer</span>
+      <button id="adminActionBtn" class="btn-outline-admin"><i class="fas fa-lock"></i> Admin login</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search projects...">
+      <button class="clear-search" id="clearSearchBtn"><i class="fas fa-times-circle"></i></button>
+    </div>
+    <div class="stats-badge" id="statsCounter"><i class="fas fa-layer-group"></i> loading...</div>
+  </div>
+
+  <div id="adminFormSection" class="admin-only-card hidden-admin">
+    <div class="form-title"><i class="fas fa-gavel"></i> <span id="formModeText">Add new website</span><span id="editModeBadge" style="background:#eef2f0; font-size:0.7rem; padding:2px 12px; border-radius:40px; margin-left:12px; display:none;">✎ editing</span></div>
+    <div class="form-grid">
+      <div class="input-group" style="flex:1.5"><label>Title *</label><input type="text" id="websiteTitle" placeholder="e.g., Portfolio 2025"></div>
+      <div class="input-group" style="flex:2"><label>Website URL *</label><input type="text" id="websiteUrl" placeholder="https://myproject.com"></div>
+      <div class="input-group" style="flex:2"><label>Description</label><textarea id="websiteDesc" rows="1" placeholder="Short note about this project"></textarea></div>
+    </div>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+      <button id="submitWebsiteBtn" class="btn-primary"><i class="fas fa-save"></i> Save website</button>
+      <button id="cancelEditBtn" class="btn-secondary" style="display: none;">Cancel edit</button>
+      <button id="resetDefaultBtn" class="btn-secondary" style="background:#fef2e6;"><i class="fas fa-arrows-rotate"></i> Reset default data</button>
+    </div>
+    <div id="formFeedback" style="font-size:0.7rem; margin-top: 12px; color:#c95a3a;"></div>
+  </div>
+
+  <div id="websitesGridContainer" class="websites-grid"></div>
+  <footer>
+    <i class="fas fa-shield-alt"></i> Admin protected · persistent storage<br>
+    <span class="creator-credit">✨ Created by <strong>Sangamesh Hiremath</strong> — webliko hub ✨</span>
+  </footer>
+</div>
+
+<div id="adminModal" class="modal">
+  <div class="modal-card">
+    <i class="fas fa-key"></i>
+    <h3 style="margin:0 0 6px;">Admin access</h3>
+    <p style="font-size:0.8rem; color:#5f7f9e;">Enter password to manage projects</p>
+    <input type="password" id="adminPassword" placeholder="Password" autocomplete="off">
+    <button id="modalLoginBtn" class="btn-modal"><i class="fas fa-unlock-alt"></i> Unlock dashboard</button>
+    <div id="modalError" class="error-msg"></div>
+    <!-- No password hint shown -->
+  </div>
+</div>
+
+<script>
+  // ========== WEBLIKO - PERSISTENT PROJECT HUB ==========
+  // Creator: Sangamesh Hiremath
+  const STORAGE_KEY = "weblikoVault";
+  const DEFAULT_WEBSITES = [
+    { id: 1001, title: "🌿 Webliko Studio", description: "Immersive brand experience with 3D elements.", url: "https://webliko-studio.demo" },
+    { id: 1002, title: "📈 Flow Analytics", description: "Real-time dashboard for growth metrics.", url: "https://flowanalytics.example" },
+    { id: 1003, title: "🧘 Mindful Canvas", description: "Minimal journaling + ambient soundscapes.", url: "https://mindful-canvas.app" },
+    { id: 1004, title: "🎨 Chroma Forge", description: "AI color palette generator & contrast tool.", url: "https://chromaforge.design" }
+  ];
+  let websites = [], editingId = null, isAdmin = false;
+  const grid = document.getElementById("websitesGridContainer"), searchInput = document.getElementById("searchInput"), clearSearch = document.getElementById("clearSearchBtn");
+  const adminForm = document.getElementById("adminFormSection"), adminBadge = document.getElementById("adminStatusBadge"), adminBtn = document.getElementById("adminActionBtn");
+  const resetBtn = document.getElementById("resetDefaultBtn"), submitBtn = document.getElementById("submitWebsiteBtn"), cancelEdit = document.getElementById("cancelEditBtn");
+  const titleInp = document.getElementById("websiteTitle"), urlInp = document.getElementById("websiteUrl"), descInp = document.getElementById("websiteDesc");
+  const formMode = document.getElementById("formModeText"), editBadge = document.getElementById("editModeBadge"), formFeedbackDiv = document.getElementById("formFeedback");
+  const statsSpan = document.getElementById("statsCounter"), modal = document.getElementById("adminModal"), modalPwd = document.getElementById("adminPassword"), modalLogin = document.getElementById("modalLoginBtn"), modalErr = document.getElementById("modalError");
+
+  // Admin password is set here (not displayed anywhere)
+  const ADMIN_PASSWORD = "bonsai2025";
+
+  function persist() { localStorage.setItem(STORAGE_KEY, JSON.stringify(websites)); }
+  function loadData() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) { try { const p = JSON.parse(stored); if (Array.isArray(p)) { websites = p; return; } } catch(e) {} }
+    websites = JSON.parse(JSON.stringify(DEFAULT_WEBSITES)); persist();
+  }
+  function checkAdminSession() { isAdmin = sessionStorage.getItem("weblikoAdmin") === "true"; updateAdminUI(); }
+  function setAdminSession(val) { if (val) { sessionStorage.setItem("weblikoAdmin", "true"); isAdmin = true; } else { sessionStorage.removeItem("weblikoAdmin"); isAdmin = false; } updateAdminUI(); renderGrid(); }
+  function updateAdminUI() {
+    if (isAdmin) { adminForm.classList.remove("hidden-admin"); adminBadge.innerHTML = '<i class="fas fa-crown"></i> Admin mode'; adminBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout'; adminBtn.classList.remove("btn-login"); resetBtn.style.display = "inline-flex"; if(editingId) cancelEditingFunc(); }
+    else { adminForm.classList.add("hidden-admin"); adminBadge.innerHTML = '<i class="fas fa-eye"></i> Viewer'; adminBtn.innerHTML = '<i class="fas fa-lock"></i> Admin login'; adminBtn.classList.add("btn-login"); resetBtn.style.display = "none"; cancelEditingFunc(); }
+  }
+  function cancelEditingFunc() { editingId = null; titleInp.value = ""; urlInp.value = ""; descInp.value = ""; formMode.innerText = "Add new website"; cancelEdit.style.display = "none"; editBadge.style.display = "none"; formFeedbackDiv.innerText = ""; }
+  function populateEdit(w) { if(!isAdmin) return; editingId = w.id; titleInp.value = w.title; urlInp.value = w.url; descInp.value = w.description||""; formMode.innerText = "Edit website"; cancelEdit.style.display = "inline-flex"; editBadge.style.display = "inline-block"; formFeedbackDiv.innerText = ""; adminForm.scrollIntoView({behavior:"smooth"}); }
+  function normalizeUrl(u) { let t = u.trim(); if(!t) return ""; if(!/^https?:\/\//i.test(t)) return "https://"+t; return t; }
+  function validateSubmit() {
+    if(!isAdmin) return;
+    let title = titleInp.value.trim(), rawUrl = urlInp.value.trim(), desc = descInp.value.trim();
+    if(!title) { formFeedbackDiv.innerText = "❌ Title required"; return; }
+    if(!rawUrl) { formFeedbackDiv.innerText = "❌ URL required"; return; }
+    let finalUrl = normalizeUrl(rawUrl);
+    try { new URL(finalUrl); } catch(e) { formFeedbackDiv.innerText = "⚠️ Enter a valid URL"; return; }
+    if(editingId !== null) {
+      let idx = websites.findIndex(w => w.id === editingId);
+      if(idx!==-1) { websites[idx] = {...websites[idx], title, url: finalUrl, description: desc || "✨ No description"}; persist(); cancelEditingFunc(); renderGrid(); showFeedback("✅ Updated","#0f7b6e"); }
+      else formFeedbackDiv.innerText = "Error";
+    } else {
+      websites.push({ id: Date.now(), title, url: finalUrl, description: desc || "🌱 New project" }); persist(); titleInp.value=""; urlInp.value=""; descInp.value=""; renderGrid(); showFeedback("✨ Added","#0f7b6e");
+    }
+  }
+  function showFeedback(msg,color) { formFeedbackDiv.innerText = msg; formFeedbackDiv.style.color = color; setTimeout(()=>{ if(formFeedbackDiv.innerText===msg) formFeedbackDiv.innerText=""; },2200); }
+  function deleteSite(id) { if(!isAdmin) return; if(confirm("Remove this project?")) { websites = websites.filter(w=>w.id!==id); persist(); if(editingId===id) cancelEditingFunc(); renderGrid(); showFeedback("🗑️ Removed","#e27c5c"); } }
+  function resetDefault() { if(!isAdmin) return; if(confirm("Replace all with default samples? Your current projects will be lost.")) { websites = JSON.parse(JSON.stringify(DEFAULT_WEBSITES)); persist(); cancelEditingFunc(); renderGrid(); showFeedback("Reset to defaults","#0f7b6e"); } }
+  function filterList(term) { if(!term.trim()) return [...websites]; let l=term.toLowerCase(); return websites.filter(w=>w.title.toLowerCase().includes(l)||(w.description&&w.description.toLowerCase().includes(l))); }
+  function updateStats() { let term=searchInput.value, f=filterList(term); statsSpan.innerHTML = `<i class="fas fa-layer-group"></i> ${f.length} / ${websites.length} projects · ${f.length===websites.length?"all":"filtered"}`; }
+  function renderGrid() {
+    let term=searchInput.value, filtered=filterList(term); updateStats();
+    if(!filtered.length) { grid.innerHTML = `<div class="empty-state"><i class="fas fa-seedling" style="font-size:2.5rem;opacity:0.5;"></i><p>No projects found.<br>${isAdmin?'Use the form above to add.':'Admin login required to add.'}</p></div>`; return; }
+    let sorted = [...filtered].sort((a,b)=>b.id-a.id);
+    grid.innerHTML = sorted.map(w=>`<div class="card"><div class="card-header"><div class="card-title"><i class="fas fa-globe"></i> ${escapeHtml(w.title)}</div>${isAdmin?`<div class="card-actions"><button class="edit-card" data-id="${w.id}"><i class="fas fa-pen"></i></button><button class="delete-card" data-id="${w.id}"><i class="fas fa-trash-alt"></i></button></div>`:''}</div><div class="card-description">${escapeHtml(w.description||"📁 Click to explore")}</div><a href="${escapeHtml(w.url)}" target="_blank" rel="noopener" class="card-link"><i class="fas fa-external-link-alt"></i> visit website</a></div>`).join("");
+  }
+  function escapeHtml(s) { if(!s) return ""; return s.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+  function attachEvents() {
+    grid.addEventListener("click", (e) => { let btn = e.target.closest("button"); if(!btn||!isAdmin) return; let id = parseInt(btn.getAttribute("data-id")); if(btn.classList.contains("edit-card")) { let found = websites.find(w=>w.id===id); if(found) populateEdit(found); } else if(btn.classList.contains("delete-card")) deleteSite(id); });
+    searchInput.addEventListener("input", ()=>renderGrid()); clearSearch.addEventListener("click", ()=>{ searchInput.value=""; renderGrid(); });
+    submitBtn.addEventListener("click", (e)=>{ e.preventDefault(); if(isAdmin) validateSubmit(); });
+    cancelEdit.addEventListener("click", (e)=>{ e.preventDefault(); cancelEditingFunc(); });
+    resetBtn.addEventListener("click", (e)=>{ if(isAdmin) resetDefault(); });
+    adminBtn.addEventListener("click", ()=>{ if(isAdmin) { setAdminSession(false); renderGrid(); cancelEditingFunc(); } else { modal.style.display="flex"; modalPwd.value=""; modalErr.innerText=""; } });
+    modalLogin.addEventListener("click", ()=>{ if(modalPwd.value === ADMIN_PASSWORD) { modal.style.display="none"; setAdminSession(true); renderGrid(); } else modalErr.innerText = "Incorrect password."; });
+    window.addEventListener("click", (e)=>{ if(e.target===modal) modal.style.display="none"; });
+  }
+  loadData(); checkAdminSession(); attachEvents(); renderGrid();
+</script>
+</body>
+</html>
