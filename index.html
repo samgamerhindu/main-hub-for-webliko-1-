@@ -2,12 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Webliko · Cloud Synced Project Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webliko · Project Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Supabase JS library -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -35,82 +33,65 @@
       justify-content: center;
       color: white;
       font-size: 1.5rem;
-      box-shadow: 0 10px 15px -6px rgba(15, 123, 110, 0.2);
     }
     .logo-text h1 {
       font-size: 1.7rem;
       font-weight: 700;
-      letter-spacing: -0.3px;
       background: linear-gradient(135deg, #1c453e, #0f7b6e);
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
     }
-    .logo-text p { font-size: 0.8rem; color: #5b7a8c; font-weight: 500; }
+    .logo-text p { font-size: 0.8rem; color: #5b7a8c; }
     .admin-controls {
       display: flex;
       gap: 12px;
-      align-items: center;
       background: white;
-      padding: 0.4rem 1rem 0.4rem 1.2rem;
+      padding: 0.4rem 1rem;
       border-radius: 60px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
       border: 1px solid #e0edf2;
     }
-    .admin-badge { font-size: 0.8rem; font-weight: 600; background: #eef6f3; padding: 0.2rem 0.8rem; border-radius: 30px; color: #0f7b6e; }
-    .btn-outline-admin { background: transparent; border: none; font-weight: 500; font-size: 0.8rem; cursor: pointer; padding: 0.4rem 0.9rem; border-radius: 40px; transition: 0.2s; color: #2c5f7a; display: inline-flex; align-items: center; gap: 8px; }
-    .btn-outline-admin:hover { background: #eef2f7; }
+    .admin-badge { font-size: 0.8rem; background: #eef6f3; padding: 0.2rem 0.8rem; border-radius: 30px; color: #0f7b6e; }
+    .btn-outline-admin { background: transparent; border: none; font-weight: 500; cursor: pointer; padding: 0.4rem 0.9rem; border-radius: 40px; color: #2c5f7a; }
     .btn-login { background: #0f7b6e; color: white; border: none; }
-    .stats-badge { background: white; padding: 0.3rem 1.2rem; border-radius: 60px; font-size: 0.8rem; font-weight: 500; color: #1f5e6e; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
     .toolbar {
-      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;
-      margin-bottom: 2.2rem; background: white; padding: 0.6rem 1.2rem; border-radius: 70px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #e2edf2;
+      display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem;
+      margin-bottom: 2rem; background: white; padding: 0.6rem 1.2rem; border-radius: 70px;
+      border: 1px solid #e2edf2;
     }
     .search-wrap {
-      display: flex; align-items: center; background: #f9fefc; border-radius: 48px;
-      padding: 0.2rem 0.2rem 0.2rem 1rem; border: 1px solid #dee9ef; flex: 1; max-width: 340px;
+      display: flex; background: #f9fefc; border-radius: 48px; padding: 0.2rem 0.2rem 0.2rem 1rem;
+      border: 1px solid #dee9ef; flex: 1; max-width: 340px;
     }
-    .search-wrap input { border: none; padding: 0.65rem 0.8rem; font-size: 0.9rem; width: 100%; background: transparent; outline: none; }
+    .search-wrap input { border: none; padding: 0.65rem; width: 100%; background: transparent; outline: none; }
     .clear-search { background: none; border: none; padding: 0 12px; cursor: pointer; color: #8ba5bc; }
+    .stats-badge { background: white; padding: 0.3rem 1.2rem; border-radius: 60px; font-size: 0.8rem; }
     .admin-only-card {
-      background: white; border-radius: 32px; padding: 1.5rem 1.8rem; margin-bottom: 2.5rem;
-      box-shadow: 0 12px 28px -10px rgba(0,0,0,0.06); border: 1px solid #e5f0f5;
-      transition: all 0.2s;
+      background: white; border-radius: 32px; padding: 1.5rem; margin-bottom: 2.5rem;
+      border: 1px solid #e5f0f5;
     }
-    .form-title { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 1.2rem; margin-bottom: 1.2rem; color: #1b4d5e; }
-    .form-grid { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.2rem; }
+    .form-title { font-weight: 600; font-size: 1.2rem; margin-bottom: 1rem; color: #1b4d5e; }
+    .form-grid { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
     .input-group { flex: 1; min-width: 170px; }
-    .input-group label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #5f7f9e; margin-bottom: 5px; display: block; }
-    .input-group input, .input-group textarea { width: 100%; padding: 0.7rem 1rem; border-radius: 20px; border: 1.5px solid #e2edf2; font-family: 'Inter', sans-serif; font-size: 0.85rem; transition: 0.2s; }
-    .input-group input:focus, .input-group textarea:focus { border-color: #0f7b6e; outline: none; box-shadow: 0 0 0 3px rgba(15,123,110,0.1); }
-    .btn-primary { background: #0f7b6e; border: none; padding: 0.6rem 1.6rem; border-radius: 40px; font-weight: 600; color: white; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
-    .btn-primary:hover { background: #0b6358; transform: scale(0.97); }
-    .btn-secondary { background: #f0f4f9; border: 1px solid #cde0e8; padding: 0.6rem 1.3rem; border-radius: 40px; font-weight: 500; cursor: pointer; }
+    .input-group label { font-size: 0.7rem; font-weight: 600; color: #5f7f9e; display: block; margin-bottom: 5px; }
+    .input-group input, .input-group textarea { width: 100%; padding: 0.7rem 1rem; border-radius: 20px; border: 1.5px solid #e2edf2; font-family: inherit; }
+    .btn-primary { background: #0f7b6e; border: none; padding: 0.6rem 1.6rem; border-radius: 40px; color: white; cursor: pointer; }
+    .btn-secondary { background: #f0f4f9; border: 1px solid #cde0e8; padding: 0.6rem 1.3rem; border-radius: 40px; cursor: pointer; }
     .websites-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 1.8rem; margin-top: 1rem; }
-    .card { background: white; border-radius: 28px; padding: 1.4rem; transition: 0.25s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #eaf3f0; }
-    .card:hover { transform: translateY(-5px); box-shadow: 0 24px 32px -16px rgba(0,0,0,0.08); border-color: #cbe3db; }
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .card { background: white; border-radius: 28px; padding: 1.4rem; border: 1px solid #eaf3f0; }
+    .card-header { display: flex; justify-content: space-between; }
     .card-title { font-weight: 700; font-size: 1.25rem; color: #1c4e4a; display: flex; gap: 8px; align-items: center; }
-    .card-title i { color: #0f7b6e; font-size: 1.2rem; }
-    .card-actions { display: flex; gap: 12px; }
-    .card-actions button { background: transparent; border: none; font-size: 1rem; cursor: pointer; color: #99b8ca; transition: 0.2s; }
-    .card-actions button.edit-card:hover { color: #0f7b6e; }
-    .card-actions button.delete-card:hover { color: #e27c5c; }
-    .card-description { margin: 1rem 0 1.2rem; color: #2f5e6e; line-height: 1.45; font-size: 0.85rem; }
-    .card-link { display: inline-flex; align-items: center; gap: 8px; background: #f3faf7; padding: 0.5rem 1rem; border-radius: 34px; font-size: 0.8rem; font-weight: 500; text-decoration: none; color: #16685c; transition: 0.2s; }
-    .card-link:hover { background: #e5f2ed; color: #0c4e44; }
-    .empty-state { text-align: center; grid-column: 1 / -1; padding: 3rem; background: #fefef7; border-radius: 48px; color: #7399ae; }
-    footer { margin-top: 3rem; text-align: center; font-size: 0.75rem; color: #98b1c2; border-top: 1px solid #e4eff5; padding-top: 1.8rem; }
-    .creator-credit { margin-top: 0.5rem; font-size: 0.7rem; color: #8ba5bc; letter-spacing: 0.3px; }
+    .card-actions button { background: none; border: none; cursor: pointer; color: #99b8ca; font-size: 1rem; margin-left: 8px; }
+    .card-description { margin: 1rem 0; color: #2f5e6e; font-size: 0.85rem; }
+    .card-link { display: inline-flex; background: #f3faf7; padding: 0.5rem 1rem; border-radius: 34px; text-decoration: none; color: #16685c; font-size: 0.8rem; }
+    .empty-state { text-align: center; grid-column: 1/-1; padding: 3rem; color: #7399ae; }
+    footer { margin-top: 3rem; text-align: center; font-size: 0.75rem; color: #98b1c2; border-top: 1px solid #e4eff5; padding-top: 1.5rem; }
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); backdrop-filter: blur(6px); align-items: center; justify-content: center; z-index: 1000; }
-    .modal-card { background: white; max-width: 400px; width: 90%; border-radius: 36px; padding: 2rem 1.8rem; text-align: center; box-shadow: 0 30px 40px -20px rgba(0,0,0,0.2); }
-    .modal-card input { width: 100%; padding: 0.9rem; margin: 1rem 0; border-radius: 60px; border: 1px solid #cde0e8; font-family: inherit; }
-    .btn-modal { background: #0f7b6e; color: white; border: none; padding: 0.7rem; width: 100%; border-radius: 60px; font-weight: 600; cursor: pointer; }
-    .error-msg { color: #e27c5c; font-size: 0.75rem; margin-top: 8px; }
+    .modal-card { background: white; max-width: 400px; width: 90%; border-radius: 36px; padding: 2rem; text-align: center; }
+    .modal-card input { width: 100%; padding: 0.9rem; margin: 1rem 0; border-radius: 60px; border: 1px solid #cde0e8; }
+    .btn-modal { background: #0f7b6e; color: white; border: none; padding: 0.7rem; width: 100%; border-radius: 60px; cursor: pointer; }
+    .error-msg { color: #e27c5c; font-size: 0.75rem; }
     .hidden-admin { display: none; }
-    .loading-spinner { text-align: center; padding: 3rem; color: #0f7b6e; }
-    @media (max-width: 680px) { body { padding: 1rem; } .toolbar { flex-direction: column; align-items: stretch; border-radius: 28px; } .admin-controls { width: 100%; justify-content: space-between; } }
   </style>
 </head>
 <body>
@@ -118,437 +99,247 @@
   <div class="header">
     <div class="logo-area">
       <div class="logo-icon"><i class="fas fa-globe"></i></div>
-      <div class="logo-text">
-        <h1>Webliko</h1>
-        <p>cloud sync · access anywhere</p>
-      </div>
+      <div class="logo-text"><h1>Webliko</h1><p>your project hub · works offline</p></div>
     </div>
-    <div class="admin-controls" id="adminControls">
+    <div class="admin-controls">
       <span id="adminStatusBadge" class="admin-badge"><i class="fas fa-eye"></i> Viewer</span>
       <button id="adminActionBtn" class="btn-outline-admin"><i class="fas fa-lock"></i> Admin login</button>
     </div>
   </div>
 
   <div class="toolbar">
-    <div class="search-wrap">
-      <i class="fas fa-search"></i>
-      <input type="text" id="searchInput" placeholder="Search projects...">
-      <button class="clear-search" id="clearSearchBtn"><i class="fas fa-times-circle"></i></button>
-    </div>
+    <div class="search-wrap"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search..."><button class="clear-search" id="clearSearchBtn"><i class="fas fa-times-circle"></i></button></div>
     <div class="stats-badge" id="statsCounter"><i class="fas fa-layer-group"></i> loading...</div>
   </div>
 
   <div id="adminFormSection" class="admin-only-card hidden-admin">
-    <div class="form-title"><i class="fas fa-gavel"></i> <span id="formModeText">Add new website</span><span id="editModeBadge" style="background:#eef2f0; font-size:0.7rem; padding:2px 12px; border-radius:40px; margin-left:12px; display:none;">✎ editing</span></div>
+    <div class="form-title"><i class="fas fa-plus-circle"></i> <span id="formModeText">Add new website</span><span id="editModeBadge" style="font-size:0.7rem; margin-left:10px; display:none;">✎ editing</span></div>
     <div class="form-grid">
-      <div class="input-group" style="flex:1.5"><label>Title *</label><input type="text" id="websiteTitle" placeholder="e.g., Portfolio 2025"></div>
-      <div class="input-group" style="flex:2"><label>Website URL *</label><input type="text" id="websiteUrl" placeholder="https://myproject.com"></div>
-      <div class="input-group" style="flex:2"><label>Description</label><textarea id="websiteDesc" rows="1" placeholder="Short note about this project"></textarea></div>
+      <div class="input-group"><label>Title *</label><input type="text" id="websiteTitle" placeholder="e.g., My Portfolio"></div>
+      <div class="input-group"><label>URL *</label><input type="text" id="websiteUrl" placeholder="https://example.com"></div>
+      <div class="input-group"><label>Description</label><textarea id="websiteDesc" rows="1" placeholder="Short description"></textarea></div>
     </div>
-    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-      <button id="submitWebsiteBtn" class="btn-primary"><i class="fas fa-save"></i> Save website</button>
-      <button id="cancelEditBtn" class="btn-secondary" style="display: none;">Cancel edit</button>
-      <button id="resetDefaultBtn" class="btn-secondary" style="background:#fef2e6;"><i class="fas fa-arrows-rotate"></i> Reset default data</button>
+    <div style="display: flex; gap: 12px;">
+      <button id="submitWebsiteBtn" class="btn-primary"><i class="fas fa-save"></i> Save</button>
+      <button id="cancelEditBtn" class="btn-secondary" style="display:none;">Cancel</button>
+      <button id="resetDefaultBtn" class="btn-secondary">Reset to defaults</button>
     </div>
     <div id="formFeedback" style="font-size:0.7rem; margin-top: 12px; color:#c95a3a;"></div>
   </div>
 
   <div id="websitesGridContainer" class="websites-grid"></div>
-  <footer>
-    <i class="fas fa-cloud-upload-alt"></i> Cloud synced via Supabase · access from any device<br>
-    <span class="creator-credit">✨ Created by <strong>Sangamesh Hiremath</strong> — webliko hub ✨</span>
-  </footer>
+  <footer>✨ Created by Sangamesh Hiremath · webliko hub · data saved locally ✨</footer>
 </div>
 
 <div id="adminModal" class="modal">
   <div class="modal-card">
-    <i class="fas fa-key"></i>
-    <h3 style="margin:0 0 6px;">Admin access</h3>
-    <p style="font-size:0.8rem; color:#5f7f9e;">Enter password to manage projects</p>
-    <input type="password" id="adminPassword" placeholder="Password" autocomplete="off">
-    <button id="modalLoginBtn" class="btn-modal"><i class="fas fa-unlock-alt"></i> Unlock dashboard</button>
+    <i class="fas fa-key" style="font-size:2rem;"></i>
+    <h3>Admin access</h3>
+    <p style="font-size:0.8rem;">Enter password to manage projects</p>
+    <input type="password" id="adminPassword" placeholder="Password">
+    <button id="modalLoginBtn" class="btn-modal">Unlock dashboard</button>
     <div id="modalError" class="error-msg"></div>
   </div>
 </div>
 
 <script>
-  // ============================================================
-  // WEBLIKO - SUPABASE POWERED CLOUD SYNC
-  // Created by Sangamesh Hiremath
-  // ============================================================
-  
-  // ---------- !!! REPLACE WITH YOUR SUPABASE CREDENTIALS !!! ----------
-  const SUPABASE_URL = "https://snppizqkqiisrhcfukwd.supabase.co";      // <-- PASTE YOUR PROJECT URL
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNucHBpenFrcWlpc3JoY2Z1a3dkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NTIwODAsImV4cCI6MjA5MjQyODA4MH0.dYy4TrmmPk5Ccsj9eh4IaYdb9WNhq2wNkNDx4Ln15fg";                   // <-- PASTE YOUR ANON KEY
-  // ------------------------------------------------------------------
-  
-  const ADMIN_PASSWORD = "bonsai2025";   // change this to any password you want
-  
-  // Initialize Supabase client
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // ========== WEBLIKO - LOCALSTORAGE VERSION (FULLY WORKING) ==========
+  const STORAGE_KEY = "webliko_local";
+  const ADMIN_PASSWORD = "bonsai2025";
   
   let websites = [];
   let editingId = null;
   let isAdmin = false;
-  let isLoading = true;
   
   // DOM elements
   const grid = document.getElementById("websitesGridContainer");
   const searchInput = document.getElementById("searchInput");
-  const clearSearchBtn = document.getElementById("clearSearchBtn");
+  const clearSearch = document.getElementById("clearSearchBtn");
   const adminForm = document.getElementById("adminFormSection");
   const adminBadge = document.getElementById("adminStatusBadge");
-  const adminActionBtn = document.getElementById("adminActionBtn");
-  const resetDefaultBtn = document.getElementById("resetDefaultBtn");
+  const adminBtn = document.getElementById("adminActionBtn");
+  const resetBtn = document.getElementById("resetDefaultBtn");
   const submitBtn = document.getElementById("submitWebsiteBtn");
-  const cancelEditBtn = document.getElementById("cancelEditBtn");
+  const cancelEdit = document.getElementById("cancelEditBtn");
   const titleInp = document.getElementById("websiteTitle");
   const urlInp = document.getElementById("websiteUrl");
   const descInp = document.getElementById("websiteDesc");
-  const formModeSpan = document.getElementById("formModeText");
-  const editModeBadge = document.getElementById("editModeBadge");
+  const formMode = document.getElementById("formModeText");
+  const editBadge = document.getElementById("editModeBadge");
   const formFeedback = document.getElementById("formFeedback");
   const statsSpan = document.getElementById("statsCounter");
   const modal = document.getElementById("adminModal");
-  const adminPassword = document.getElementById("adminPassword");
-  const modalLoginBtn = document.getElementById("modalLoginBtn");
+  const modalPwd = document.getElementById("adminPassword");
+  const modalLogin = document.getElementById("modalLoginBtn");
   const modalError = document.getElementById("modalError");
   
-  // Helper: Normalize URL
-  function normalizeUrl(url) {
-    let trimmed = url.trim();
-    if (!trimmed) return "";
-    if (!/^https?:\/\//i.test(trimmed)) return "https://" + trimmed;
-    return trimmed;
+  // Helper functions
+  function saveToLocal() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(websites));
   }
   
-  // Escape HTML to prevent XSS
-  function escapeHtml(str) {
-    if (!str) return "";
-    return str.replace(/[&<>]/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      return m;
-    });
+  function loadFromLocal() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        websites = JSON.parse(stored);
+        if (!Array.isArray(websites)) websites = [];
+      } catch(e) { websites = []; }
+    }
+    if (!websites.length) {
+      // Default sample projects
+      websites = [
+        { id: 1001, title: "🌿 Webliko Studio", description: "Immersive brand experience", url: "https://webliko-studio.demo" },
+        { id: 1002, title: "📈 Flow Analytics", description: "Real-time dashboard", url: "https://flowanalytics.example" },
+        { id: 1003, title: "🧘 Mindful Canvas", description: "Journaling app", url: "https://mindful-canvas.app" }
+      ];
+      saveToLocal();
+    }
   }
   
-  // Show temporary feedback message
-  function showFeedback(msg, color = "#0f7b6e") {
-    formFeedback.innerText = msg;
-    formFeedback.style.color = color;
-    setTimeout(() => {
-      if (formFeedback.innerText === msg) formFeedback.innerText = "";
-    }, 2500);
-  }
+  function normalizeUrl(u) { let t = u.trim(); if (!t) return ""; if (!/^https?:\/\//i.test(t)) return "https://"+t; return t; }
+  function escapeHtml(s) { if (!s) return ""; return s.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+  function showFeedback(msg, color="#0f7b6e") { formFeedback.innerText = msg; formFeedback.style.color = color; setTimeout(()=>{ if(formFeedback.innerText===msg) formFeedback.innerText=""; }, 2500); }
   
-  // Cancel editing mode
   function cancelEditing() {
     editingId = null;
     titleInp.value = "";
     urlInp.value = "";
     descInp.value = "";
-    formModeSpan.innerText = "Add new website";
-    cancelEditBtn.style.display = "none";
-    editModeBadge.style.display = "none";
-    formFeedback.innerText = "";
+    formMode.innerText = "Add new website";
+    cancelEdit.style.display = "none";
+    editBadge.style.display = "none";
   }
   
-  // Load websites from Supabase
-  async function loadWebsites() {
-    isLoading = true;
-    grid.innerHTML = `<div class="loading-spinner"><i class="fas fa-spinner fa-pulse"></i> Syncing from cloud...</div>`;
-    
-    try {
-      const { data, error } = await supabase
-        .from('websites')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) {
-        console.error("Supabase error:", error);
-        formFeedback.innerText = "❌ Failed to load from cloud. Check Supabase credentials and RLS policies.";
-        websites = [];
-      } else {
-        websites = data || [];
-      }
-    } catch (err) {
-      console.error("Network error:", err);
-      formFeedback.innerText = "❌ Network error. Cannot reach Supabase.";
-      websites = [];
-    }
-    
-    isLoading = false;
-    renderGrid();
-  }
-  
-  // Save (insert or update) website to Supabase
-  async function saveWebsiteToCloud(website, isUpdate = false) {
-    if (isUpdate) {
-      const { error } = await supabase
-        .from('websites')
-        .update({
-          title: website.title,
-          url: website.url,
-          description: website.description
-        })
-        .eq('id', website.id);
-      if (error) throw error;
-    } else {
-      const { error } = await supabase
-        .from('websites')
-        .insert([{
-          id: website.id,
-          title: website.title,
-          url: website.url,
-          description: website.description
-        }]);
-      if (error) throw error;
-    }
-  }
-  
-  // Delete website from Supabase
-  async function deleteWebsiteFromCloud(id) {
-    const { error } = await supabase
-      .from('websites')
-      .delete()
-      .eq('id', id);
-    if (error) throw error;
-  }
-  
-  // Reset to default sample data
-  async function resetToDefault() {
-    if (!isAdmin) return;
-    if (!confirm("⚠️ Replace all projects with default samples? Your current data will be lost.")) return;
-    
-    const defaultSites = [
-      { id: Date.now() + 1, title: "🌿 Webliko Studio", description: "Immersive brand experience with 3D elements.", url: "https://webliko-studio.demo" },
-      { id: Date.now() + 2, title: "📈 Flow Analytics", description: "Real-time dashboard for growth metrics.", url: "https://flowanalytics.example" },
-      { id: Date.now() + 3, title: "🧘 Mindful Canvas", description: "Minimal journaling + ambient soundscapes.", url: "https://mindful-canvas.app" },
-      { id: Date.now() + 4, title: "🎨 Chroma Forge", description: "AI color palette generator & contrast tool.", url: "https://chromaforge.design" }
-    ];
-    
-    try {
-      // Delete all existing websites
-      for (let w of websites) {
-        await deleteWebsiteFromCloud(w.id);
-      }
-      // Insert default ones
-      for (let w of defaultSites) {
-        await saveWebsiteToCloud(w, false);
-      }
-      await loadWebsites();
-      showFeedback("Reset to default projects", "#0f7b6e");
-    } catch (err) {
-      console.error("Reset error:", err);
-      showFeedback("❌ Reset failed: " + err.message, "#c95a3a");
-    }
-  }
-  
-  // Submit new/edited website
-  async function submitWebsite() {
-    if (!isAdmin) return;
-    
-    let title = titleInp.value.trim();
-    let rawUrl = urlInp.value.trim();
-    let description = descInp.value.trim();
-    
-    if (!title) { showFeedback("❌ Title is required", "#c95a3a"); return; }
-    if (!rawUrl) { showFeedback("❌ URL is required", "#c95a3a"); return; }
-    
-    let finalUrl = normalizeUrl(rawUrl);
-    try {
-      new URL(finalUrl);
-    } catch(e) {
-      showFeedback("⚠️ Please enter a valid URL (e.g., https://example.com)", "#c95a3a");
+  function renderGrid() {
+    const term = searchInput.value.toLowerCase();
+    let filtered = websites.filter(w => w.title.toLowerCase().includes(term) || (w.description && w.description.toLowerCase().includes(term)));
+    statsSpan.innerHTML = `<i class="fas fa-layer-group"></i> ${filtered.length} / ${websites.length} projects`;
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="empty-state"><i class="fas fa-folder-open"></i><p>No projects found.<br>${isAdmin ? 'Add one using the form above.' : 'Admin login required to add.'}</p></div>`;
       return;
     }
-    
-    try {
-      if (editingId !== null) {
-        // Update existing
-        await saveWebsiteToCloud({
-          id: editingId,
-          title: title,
-          url: finalUrl,
-          description: description || "✨ No description"
-        }, true);
-        await loadWebsites();
-        cancelEditing();
-        showFeedback("✅ Website updated!", "#0f7b6e");
-      } else {
-        // Create new
-        const newId = Date.now();
-        await saveWebsiteToCloud({
-          id: newId,
-          title: title,
-          url: finalUrl,
-          description: description || "🌱 New project"
-        }, false);
-        titleInp.value = "";
-        urlInp.value = "";
-        descInp.value = "";
-        await loadWebsites();
-        showFeedback("✨ New website added!", "#0f7b6e");
-      }
-    } catch (err) {
-      console.error("Save error:", err);
-      showFeedback("❌ Failed to save: " + err.message, "#c95a3a");
-    }
+    let sorted = [...filtered].sort((a,b) => b.id - a.id);
+    grid.innerHTML = sorted.map(w => `
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><i class="fas fa-globe"></i> ${escapeHtml(w.title)}</div>
+          ${isAdmin ? `<div class="card-actions"><button class="edit-card" data-id="${w.id}"><i class="fas fa-pen"></i></button><button class="delete-card" data-id="${w.id}"><i class="fas fa-trash-alt"></i></button></div>` : ''}
+        </div>
+        <div class="card-description">${escapeHtml(w.description || "📁 No description")}</div>
+        <a href="${escapeHtml(w.url)}" target="_blank" rel="noopener" class="card-link"><i class="fas fa-external-link-alt"></i> visit website</a>
+      </div>
+    `).join("");
   }
   
-  // Delete website (with confirm)
-  async function deleteWebsite(id) {
+  function addOrUpdate() {
     if (!isAdmin) return;
-    if (!confirm("Remove this project permanently?")) return;
+    let title = titleInp.value.trim();
+    let rawUrl = urlInp.value.trim();
+    let desc = descInp.value.trim();
+    if (!title) { showFeedback("❌ Title required", "#c95a3a"); return; }
+    if (!rawUrl) { showFeedback("❌ URL required", "#c95a3a"); return; }
+    let finalUrl = normalizeUrl(rawUrl);
+    try { new URL(finalUrl); } catch(e) { showFeedback("⚠️ Invalid URL", "#c95a3a"); return; }
     
-    try {
-      await deleteWebsiteFromCloud(id);
-      await loadWebsites();
-      if (editingId === id) cancelEditing();
-      showFeedback("🗑️ Project removed", "#e27c5c");
-    } catch (err) {
-      console.error("Delete error:", err);
-      showFeedback("❌ Delete failed: " + err.message, "#c95a3a");
+    if (editingId !== null) {
+      let index = websites.findIndex(w => w.id === editingId);
+      if (index !== -1) {
+        websites[index] = { ...websites[index], title, url: finalUrl, description: desc || "✨ No description" };
+        saveToLocal();
+        cancelEditing();
+        renderGrid();
+        showFeedback("✅ Updated", "#0f7b6e");
+      }
+    } else {
+      let newId = Date.now();
+      websites.push({ id: newId, title, url: finalUrl, description: desc || "🌱 New project" });
+      saveToLocal();
+      titleInp.value = ""; urlInp.value = ""; descInp.value = "";
+      renderGrid();
+      showFeedback("✨ Added", "#0f7b6e");
     }
   }
   
-  // Populate form for editing
+  function deleteWebsite(id) {
+    if (!isAdmin) return;
+    if (confirm("Delete this project?")) {
+      websites = websites.filter(w => w.id !== id);
+      saveToLocal();
+      if (editingId === id) cancelEditing();
+      renderGrid();
+      showFeedback("🗑️ Removed", "#e27c5c");
+    }
+  }
+  
+  function resetToDefault() {
+    if (!isAdmin) return;
+    if (confirm("Reset all projects to default samples? Your data will be lost.")) {
+      websites = [
+        { id: 1001, title: "🌿 Webliko Studio", description: "Immersive brand experience", url: "https://webliko-studio.demo" },
+        { id: 1002, title: "📈 Flow Analytics", description: "Real-time dashboard", url: "https://flowanalytics.example" },
+        { id: 1003, title: "🧘 Mindful Canvas", description: "Journaling app", url: "https://mindful-canvas.app" }
+      ];
+      saveToLocal();
+      cancelEditing();
+      renderGrid();
+      showFeedback("Reset to defaults", "#0f7b6e");
+    }
+  }
+  
   function editWebsite(website) {
     if (!isAdmin) return;
     editingId = website.id;
     titleInp.value = website.title;
     urlInp.value = website.url;
     descInp.value = website.description || "";
-    formModeSpan.innerText = "Edit website";
-    cancelEditBtn.style.display = "inline-flex";
-    editModeBadge.style.display = "inline-block";
-    formFeedback.innerText = "";
-    adminForm.scrollIntoView({ behavior: "smooth", block: "center" });
+    formMode.innerText = "Edit website";
+    cancelEdit.style.display = "inline-flex";
+    editBadge.style.display = "inline-block";
+    adminForm.scrollIntoView({ behavior: "smooth" });
   }
   
-  // Filter and render grid
-  function filterWebsites(term) {
-    if (!term.trim()) return [...websites];
-    const lower = term.toLowerCase();
-    return websites.filter(w =>
-      w.title.toLowerCase().includes(lower) ||
-      (w.description && w.description.toLowerCase().includes(lower))
-    );
-  }
-  
-  function updateStats() {
-    const term = searchInput.value;
-    const filtered = filterWebsites(term);
-    statsSpan.innerHTML = `<i class="fas fa-layer-group"></i> ${filtered.length} / ${websites.length} projects · ${filtered.length === websites.length ? "all" : "filtered"}`;
-  }
-  
-  function renderGrid() {
-    if (isLoading) return;
-    const term = searchInput.value;
-    const filtered = filterWebsites(term);
-    updateStats();
-    
-    if (filtered.length === 0) {
-      grid.innerHTML = `<div class="empty-state"><i class="fas fa-seedling" style="font-size:2.5rem;opacity:0.5;"></i><p>No projects found.<br>${isAdmin ? 'Use the form above to add.' : 'Admin login required to add.'}</p></div>`;
-      return;
-    }
-    
-    const sorted = [...filtered].sort((a, b) => b.id - a.id);
-    grid.innerHTML = sorted.map(website => `
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <i class="fas fa-globe"></i> ${escapeHtml(website.title)}
-          </div>
-          ${isAdmin ? `
-          <div class="card-actions">
-            <button class="edit-card" data-id="${website.id}"><i class="fas fa-pen"></i></button>
-            <button class="delete-card" data-id="${website.id}"><i class="fas fa-trash-alt"></i></button>
-          </div>` : ''}
-        </div>
-        <div class="card-description">
-          ${escapeHtml(website.description || "📁 Click to explore")}
-        </div>
-        <a href="${escapeHtml(website.url)}" target="_blank" rel="noopener noreferrer" class="card-link">
-          <i class="fas fa-external-link-alt"></i> visit website
-        </a>
-      </div>
-    `).join("");
-  }
-  
-  // Admin session management
+  // Admin session
   function checkAdminSession() {
     isAdmin = sessionStorage.getItem("weblikoAdmin") === "true";
     updateAdminUI();
   }
-  
-  function setAdminSession(value) {
-    if (value) {
-      sessionStorage.setItem("weblikoAdmin", "true");
-      isAdmin = true;
-    } else {
-      sessionStorage.removeItem("weblikoAdmin");
-      isAdmin = false;
-    }
+  function setAdminSession(val) {
+    if (val) { sessionStorage.setItem("weblikoAdmin", "true"); isAdmin = true; }
+    else { sessionStorage.removeItem("weblikoAdmin"); isAdmin = false; }
     updateAdminUI();
     renderGrid();
   }
-  
   function updateAdminUI() {
     if (isAdmin) {
       adminForm.classList.remove("hidden-admin");
       adminBadge.innerHTML = '<i class="fas fa-crown"></i> Admin mode';
-      adminActionBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
-      adminActionBtn.classList.remove("btn-login");
-      resetDefaultBtn.style.display = "inline-flex";
+      adminBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+      adminBtn.classList.remove("btn-login");
+      resetBtn.style.display = "inline-flex";
     } else {
       adminForm.classList.add("hidden-admin");
       adminBadge.innerHTML = '<i class="fas fa-eye"></i> Viewer';
-      adminActionBtn.innerHTML = '<i class="fas fa-lock"></i> Admin login';
-      adminActionBtn.classList.add("btn-login");
-      resetDefaultBtn.style.display = "none";
+      adminBtn.innerHTML = '<i class="fas fa-lock"></i> Admin login';
+      adminBtn.classList.add("btn-login");
+      resetBtn.style.display = "inline-flex";
       cancelEditing();
     }
   }
   
-  // Event listeners
+  // Event binding
   function bindEvents() {
-    // Search & clear
     searchInput.addEventListener("input", () => renderGrid());
-    clearSearchBtn.addEventListener("click", () => {
-      searchInput.value = "";
-      renderGrid();
+    clearSearch.addEventListener("click", () => { searchInput.value = ""; renderGrid(); });
+    submitBtn.addEventListener("click", (e) => { e.preventDefault(); if (isAdmin) addOrUpdate(); });
+    cancelEdit.addEventListener("click", (e) => { e.preventDefault(); cancelEditing(); });
+    resetBtn.addEventListener("click", () => { if (isAdmin) resetToDefault(); });
+    adminBtn.addEventListener("click", () => {
+      if (isAdmin) { setAdminSession(false); renderGrid(); }
+      else { modal.style.display = "flex"; modalPwd.value = ""; modalError.innerText = ""; }
     });
-    
-    // Form buttons
-    submitBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (isAdmin) submitWebsite();
-    });
-    cancelEditBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      cancelEditing();
-    });
-    resetDefaultBtn.addEventListener("click", () => {
-      if (isAdmin) resetToDefault();
-    });
-    
-    // Admin login/logout
-    adminActionBtn.addEventListener("click", () => {
-      if (isAdmin) {
-        setAdminSession(false);
-        renderGrid();
-      } else {
-        modal.style.display = "flex";
-        adminPassword.value = "";
-        modalError.innerText = "";
-      }
-    });
-    
-    // Modal login
-    modalLoginBtn.addEventListener("click", () => {
-      if (adminPassword.value === ADMIN_PASSWORD) {
+    modalLogin.addEventListener("click", () => {
+      if (modalPwd.value === ADMIN_PASSWORD) {
         modal.style.display = "none";
         setAdminSession(true);
         renderGrid();
@@ -556,34 +347,25 @@
         modalError.innerText = "Incorrect password.";
       }
     });
-    
-    // Close modal on background click
-    window.addEventListener("click", (e) => {
-      if (e.target === modal) modal.style.display = "none";
-    });
-    
-    // Grid event delegation for edit/delete
-    grid.addEventListener("click", async (e) => {
-      const btn = e.target.closest("button");
+    window.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
+    grid.addEventListener("click", (e) => {
+      let btn = e.target.closest("button");
       if (!btn || !isAdmin) return;
-      const id = parseInt(btn.getAttribute("data-id"));
+      let id = parseInt(btn.getAttribute("data-id"));
       if (btn.classList.contains("edit-card")) {
-        const found = websites.find(w => w.id === id);
+        let found = websites.find(w => w.id === id);
         if (found) editWebsite(found);
       } else if (btn.classList.contains("delete-card")) {
-        await deleteWebsite(id);
+        deleteWebsite(id);
       }
     });
   }
   
   // Initialize
-  async function init() {
-    bindEvents();
-    checkAdminSession();
-    await loadWebsites();
-  }
-  
-  init();
+  loadFromLocal();
+  checkAdminSession();
+  bindEvents();
+  renderGrid();
 </script>
 </body>
 </html>
